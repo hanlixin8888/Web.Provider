@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--   XML 文件生成时间 2015-05-18 12:00  -->
+<Entity>
+  <PrimaryKeyName>ID</PrimaryKeyName>
+  <MappingTableName>PS_ACTOR</MappingTableName>
+  <Sqls>
+    <Sql Name="GetPurchaseInInfo">
+      <SqlString>
+        <String>
+          <![CDATA[
+             select 
+                rt.sheetid,  
+                rti.seqno,  
+                rt.refsheetid,   
+                rt.venderid,
+                rt.totalqty,
+                gd.goodscode,   
+                gd.goodsname,  
+                gd.goodsspec,
+                gd.unitname,  
+                vd.vendercode,    
+                vd.vendername,  
+                rti.pkgunitname,  
+                lui.lookup as pkgclassname,
+                rti.pkgnumber,   
+                rti.pkgqty,         
+                rti.bulkqty,          
+                rti.warehouseid,
+                wh.warehousename,
+                rti.cost,
+                rti.cost*rti.pkgnumber as PkgCost,
+                rti.costvalue,
+                rti.notifyqty,    
+                rti.qty, 
+                (case rt.PurType when 0 then '普通' else  '总量' end) PurType,
+                rt.paytypecode,   
+                rt.flag,          
+                rt.editor,         
+                rt.editdate,        
+                rt.CheckDate
+              from receipt rt 
+              inner join receiptitem rti on rt.sheetid=rti.sheetid
+              inner join goods gd on rti.goodsid=gd.goodsid
+              left join vender vd on vd.venderid=rt.venderid
+              left join lookupitem lui on lui.fieldvalue=rti.pkgclass and lui.lookupid='PKGCLASS' 
+              left join warehouse wh on wh.warehouseid=rti.warehouseid
+              where 
+]]>
+        </String>
+        <Param Name = "@Where" Column = "Where" TypeName = "System.String" />
+      </SqlString>
+    </Sql>
+
+    <Sql Name="GetPurchaseInMain">
+      <SqlString>
+        <String>
+          <![CDATA[
+          select rt.sheetid, 
+             rt.refsheetid,
+             rt.flag, 
+             rt.paytypecode, 
+             pt.paytypename,
+             rt.totalqty,
+             rt.totalcostvalue, 
+             rt.Editor,
+             rt.editdate,
+             rt.CheckDate,
+             rt.note,
+             (case rt.PurType when 0 then '普通' else  '总量' end) PurType,
+             vd.vendername 
+        from receipt rt  
+        inner join vender vd on vd.venderid=rt.venderid
+        inner join paytype pt on pt.paytypecode=rt.paytypecode
+         where
+]]>
+        </String>
+        <Param Name = "@Where" Column = "Where" TypeName = "System.String" />
+      </SqlString>
+    </Sql>
+    <Sql Name="GetPurchaseInDetail">
+      <SqlString>
+        <String>
+          <![CDATA[
+             select rti.sheetid,
+                 gd.goodscode,
+                 gd.goodsname, 
+                 gd.unitname,
+                 gd.goodsspec,
+                 rti.pkgunitname,  
+                 lui.lookup as pkgclassname,
+                 rti.pkgnumber,   
+                 rti.pkgqty,         
+                 rti.bulkqty,          
+                 rti.warehouseid,
+                 wh.warehousename, 
+                 rti.notifyqty,
+                 rti.qty,
+                 rti.cost*rti.pkgnumber as PkgCost,
+                 rti.cost,
+                 rti.costvalue,
+                 rti.remark
+            from receiptitem rti  
+            inner join goods gd on rti.goodsid = gd.goodsid
+            left join lookupitem lui on lui.fieldvalue=rti.pkgclass and lui.lookupid='PKGCLASS' 
+            left join warehouse wh on wh.warehouseid=rti.warehouseid
+            where rti.sheetid = @CODE
+]]>
+        </String>
+        <Param Name = "@CODE" Column = "SHEETID" TypeName = "System.String" />
+      </SqlString>
+    </Sql>
+  </Sqls>
+</Entity>

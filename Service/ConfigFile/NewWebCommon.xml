@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?> 
+ <!--   XML 文件生成时间 2012-07-18 12:00  --> 
+ <Entity> 
+   <PrimaryKeyName>ID</PrimaryKeyName> 
+   <MappingTableName>PS_ACTOR</MappingTableName> 
+   <Sqls> 
+	   <Sql Name="GetUserInfo">
+		   <SqlString>
+			   <String>
+				   <![CDATA[
+              SELECT 
+ VUSERCODE  
+ ,USERNAME
+ ,VENDERID  
+ ,PASSWORD
+ FROM 
+ venderuser 
+  WHERE VUSERCODE = @CODE and PASSWORD=@pwd;
+]]>
+			   </String>
+			   <Param Name = "@CODE" Column = "VUSERCODE" TypeName = "System.String" />
+         <Param Name = "@pwd" Column = "PASSWORD" TypeName = "System.String" />
+		   </SqlString>
+	   </Sql>
+     <Sql Name="GetVenderInfo">
+       <SqlString>
+         <String>
+           <![CDATA[
+              SELECT 
+ VENDERID 
+ ,VENDERCODE 
+ ,VENDERNAME 
+ FROM 
+ VENDER where status=1
+]]>
+         </String>
+       </SqlString>
+     </Sql>
+     <Sql Name="CheckVenderUser">
+       <SqlString>
+         <String>
+           <![CDATA[
+                SELECT 
+               VUSERCODE  
+               ,USERNAME
+               ,VENDERID  
+               FROM 
+               venderuser 
+                WHERE VUSERCODE = @CODE
+]]>
+         </String>
+         <Param Name = "@CODE" Column = "VUSERCODE" TypeName = "System.String" />
+       </SqlString>
+     </Sql>
+     <Sql Name="GetVenderUserInfo">
+       <SqlString>
+         <String>
+           <![CDATA[
+               select vu.vusercode,vu.venderid,vu.username,v.vendername,v.vendercode 
+              from venderuser vu inner join vender v on vu.venderid=v.venderid
+]]>
+         </String>
+       </SqlString>
+     </Sql>
+     
+     <Sql Name="AddVenderUser">
+       <SqlString>
+         <String>
+           <![CDATA[
+              insert into venderuser(VUSERCODE,PASSWORD,VENDERID,USERNAME) values(@VUSERCODE,@PASSWORD,@VENDERID,@USERNAME)
+]]>
+         </String>
+         <Param Name = "@VUSERCODE" Column = "VUSERCODE" TypeName = "System.String" />
+         <Param Name = "@PASSWORD" Column = "PASSWORD" TypeName = "System.String" />
+         <Param Name = "@VENDERID" Column = "VENDERID" TypeName = "System.Int" />
+         <Param Name = "@USERNAME" Column = "USERNAME" TypeName = "System.String" />
+       </SqlString>
+     </Sql>
+
+     <Sql Name="DeleteVenderUser">
+       <SqlString>
+         <String>
+           <![CDATA[
+              delete from venderuser where VUSERCODE=@VUSERCODE
+]]>
+         </String>
+         <Param Name = "@VUSERCODE" Column = "VUSERCODE" TypeName = "System.String" />
+       </SqlString>
+     </Sql>
+
+     <Sql Name="ChangePwd">
+       <SqlString>
+         <String>
+           <![CDATA[
+              update venderuser set PASSWORD=@PASSWORD where VUSERCODE=@VUSERCODE
+]]>
+         </String>
+         <Param Name = "@VUSERCODE" Column = "VUSERCODE" TypeName = "System.String" />
+         <Param Name = "@PASSWORD" Column = "PASSWORD" TypeName = "System.String" />
+       </SqlString>
+     </Sql>
+   </Sqls> 
+ </Entity>

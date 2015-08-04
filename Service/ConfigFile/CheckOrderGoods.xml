@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?> 
+ <!--   XML 文件生成时间 2012-07-18 12:00  --> 
+ <Entity> 
+   <PrimaryKeyName>ID</PrimaryKeyName> 
+   <MappingTableName>PS_ACTOR</MappingTableName> 
+   <Sqls> 
+	   <Sql Name="GetOrderGoodsInfo">
+		   <SqlString>
+			   <String>
+				   <![CDATA[
+             select so1.sheetid,so1.rationdate,g.goodscode,g.goodsname,soi.Qty,soi.RealQty,0 as CHECKQTY,
+                    (select sum(qty) from  SaleOrderItem1 soi inner join goods g on g.goodsid=soi.goodsid and soi. sheetid=@CODE) as GoodsCount
+             from SaleOrder so1 inner join 
+                  SaleOrderItem1  soi   on  soi.sheetid=so1.sheetid inner join 
+                  goods g on g.goodsid=soi.goodsid
+            where so1. sheetid=@CODE and so1.FLAG=100
+]]>
+			   </String>
+			   <Param Name = "@CODE" Column = "SHEETID" TypeName = "System.String" />
+		   </SqlString>
+	   </Sql>
+     <Sql Name="CheckOrderGoodsInfo">
+       <SqlString>
+         <String>
+           <![CDATA[
+              insert into checkordergoods(sheetid,goodscode,checkno) values(@sheetid,@goodscode,@checkno)
+]]>
+         </String>
+         <Param Name = "@sheetid" Column = "SHEETID" TypeName = "System.String" />
+         <Param Name = "@goodscode" Column = "GOODSCODE" TypeName = "System.String" />
+         <Param Name = "@checkno" Column = "CHECKNO" TypeName = "System.Int" />
+       </SqlString>
+     </Sql>
+   </Sqls> 
+ </Entity>

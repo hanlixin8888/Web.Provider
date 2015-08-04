@@ -1,0 +1,95 @@
+﻿@model Model.VenderUser
+ @{
+               ViewBag.Title = "我厨供应商在线查询系统";
+               Layout = "~/Views/Shared/_JQBaseLayOut.cshtml";
+}
+@section JQscriptSection{
+     <link href="../../Content/default.css" rel="stylesheet" type="text/css" />
+     <script src="../../Scripts/jqueryeasyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <style type="text/css">
+        .disp {
+            display: none;
+        }
+         .nodisp {
+            display: inline;
+        }
+    </style>
+    <script type="text/javascript">
+        //页面加载
+        $(function () {
+            //加载菜单
+            //  loadMenu();
+            $('#loginOut').click(function () {
+                $.messager.confirm('系统提示', '您确定要退出本次登录吗?', function (r) {
+                    if (r) {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("LogOut", "Account")',
+                            success: function (data) {
+                                location.href = '@Url.Action("LogOn", "Account")';
+                            }
+                        });
+                        }
+                });
+            })
+        });
+</script>
+ }
+   <style type="text/css">
+    .divbox{ width:600px; height:300px; position:absolute;    left:50%;    top:50%;    margin-left:-350px;    margin-top:-150px; }
+   </style>
+    
+<body style="background-color:ButtonFace">
+     <div region="north" split="true" border="false" style="overflow: hidden; height: 51px;
+        color: #000000; background: url(../Content/Ext/resources/themes/images/gray/panel-header-default-bottom-bg.gif);
+        font-family: Verdana, 微软雅黑,黑体">
+        <span style="float: right; padding-right: 10px; padding-top: 30px;" class="head">欢迎:@Model.USERNAME <a
+            href="#" id="loginOut"  style="color:black">安全退出</a></span>  
+            @*<img src="../../Content/themes/base/images/logo.png" height="50" align="absmiddle" />*@
+        </span>
+        <span style="padding-left:10px; font-size: 20px; ">
+            <img src="/Content/images/blocks.gif" width="20" height="20" align="absmiddle" />
+             我厨&reg - 供应商在线查询系统
+        </span>
+    </div>
+    <div class="divbox">
+           <p>
+                    <span style="padding-left:10px;  " >
+                        <a href="/User/ChangePassWord"><img src="/Content/images/png-0000.png" width="100" height="100" align="absmiddle" />更改密码</a>
+                    </span>
+                </br>
+                    <span style="padding-left:10px;  " class="@ViewData["NInSCI"]">
+                        <a href="/OrderCheck/OrderCheck"><img src="/Content/images/png-0000.png" width="100" height="100" align="absmiddle" />订单拣货校验</a>
+                    </span>
+                    <span style="padding-left:10px;  " class="@ViewData["NInSCI"]">
+                        <a href="/User/AddUser"><img src="/Content/images/png-0000.png" width="100" height="100" align="absmiddle" />供应商用户</a>
+                    </span>
+                    
+                    
+                     </br>
+                    <span style="padding-left:10px;  " >
+                        <a href="/Purchase/PurchaseMain"><img src="/Content/images/png-0000.png" width="100" height="100" align="absmiddle" />采购订货单</a>
+                    </span>
+                     <span style="padding-left:10px;  " >
+                        <a href="/Purchase/Purchase"><img src="/Content/images/png-0000.png" width="100" height="100" align="absmiddle" />采购订货明细单</a>
+                    </span>
+                   
+                    </br>
+                    <span style="padding-left:10px;  " >
+                        <a href="/PurchaseIn/PurchaseInMain"><img src="/Content/images/png-0000.png" width="100" height="100" align="absmiddle" />采购进货单</a>
+                    </span>
+                     <span style="padding-left:10px;  " >
+                        <a href="/PurchaseIn/PurchaseIn"><img src="/Content/images/png-0000.png" width="100" height="100" align="absmiddle" />采购进货明细单</a>
+                    </span>
+                    </br>
+                        <span style="padding-left:10px;  " >
+                        <a href="/PurchaseOut/PurchaseOutMain"><img src="/Content/images/png-0000.png" width="100" height="100" align="absmiddle" />采购退货单</a>
+                    </span>
+                    <span style="padding-left:10px;  " >
+                        <a href="/PurchaseOut/PurchaseOut"><img src="/Content/images/png-0000.png" width="100" height="100" align="absmiddle" />采购退货明细单</a>
+                    </span>
+                   
+                </p>
+    </div>
+</body>
+

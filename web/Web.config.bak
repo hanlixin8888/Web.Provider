@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  有关如何配置 ASP.NET 应用程序的详细信息，请访问
+  http://go.microsoft.com/fwlink/?LinkId=152368
+  -->
+<configuration>
+  <configSections>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <!--<section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />-->
+    <sectionGroup name="system.web.webPages.razor" type="System.Web.WebPages.Razor.Configuration.RazorWebSectionGroup, System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35">
+      <section name="host" type="System.Web.WebPages.Razor.Configuration.HostSection, System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" requirePermission="false" />
+      <section name="pages" type="System.Web.WebPages.Razor.Configuration.RazorPagesSection, System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" requirePermission="false" />
+    </sectionGroup>
+    <section name="dataConfiguration" type="Microsoft.Practices.EnterpriseLibrary.Data.Configuration.DatabaseSettings, Microsoft.Practices.EnterpriseLibrary.Data" />
+    <section name="cachingConfiguration" type="Microsoft.Practices.EnterpriseLibrary.Caching.Configuration.CacheManagerSettings, Microsoft.Practices.EnterpriseLibrary.Caching" />
+  </configSections>
+  <connectionStrings>
+    <add name="NewWeb" connectionString="Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.3.253)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = CSDB)));Persist Security Info=True;User ID=asf;Password=oracle;" providerName="Oracle.DataAccess.Client" />
+  </connectionStrings>
+
+  <appSettings>
+    <!--<add key="webpages:Version" value="1.0.0.0" />
+    <add key="ClientValidationEnabled" value="true" />
+    <add key="UnobtrusiveJavaScriptEnabled" value="true" />-->
+    <add key="webpages:Version" value="1.0.0.0"/>
+    <add key="ClientValidationEnabled" value="true"/>
+    <add key="UnobtrusiveJavaScriptEnabled" value="true"/>
+    <add key="AppType" value="Web" />
+    <add key="webpages:Version" value="1.0.0.0" />
+    <add key="ClientValidationEnabled" value="true" />
+    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+    <add key="SaveCodeRunInfo" value="true" />
+    <add key="XmlConfigPath" value="ConfigFile\" />
+    <add key="WcfWsHttpBindingName" value="WSHttpBinding_ERP" />
+    <add key="WcfNetTcpBindingName" value="netTcpBinding" />
+    <add key="ServiceDomainName" value="MB.ERP" />
+    <!-- WebTransDownload Uri Seifer Xu -->
+    <add key="WebTransBaseUri" value="http://localhost:23536/Download/" />
+    <!--<add key="WcfServers" value="长线订货会系统,mb(149-12).credential;本地开发服务器,http://localhost:8732;长线订货会测试系统,mb(203-55).credential;克隆服务器(IIS),mb1.credential;正式服务器(IIS),103-11.credential" />-->
+    <add key="WcfServers" value="本地开发服务器,http://localhost:4001;ABC,mbFabric203-102-Release.credential" />
+    <add key="EndpointFormatString" value="http://{0}/{1}.svc" />
+    <add key="ReplaceRelativePathLastDot" value="True" />
+    <add key="StartWindowsCredential" value="true" />
+    <add key="ApplicationName" value="我厨一资源管理平台" />
+    <add key="EntityCachName" value="MBFS.Orm.EntityCache" />
+    <add key="SqlCachName" value="MBFS.Orm.SqlCache" />
+    <add key="MappingCachName" value="MBFS.Orm.MappingCache" />
+    <add key="XmlCachName" value="MBFS.Orm.XmlCfgFileCache" />
+    <add key="HelperFileName" value="MBFS.chm" />
+    <add key="ClientSettingsProvider.ServiceUri" value="" />
+    <add key="VersionAutoUpdate" value="MB.ERP.BaseLibrary.CSysSetting.ApplicationVersionServerUIRule,MB.ERP.BaseLibrary.CSysSetting.dll" />
+    <add key="BfModuleComment" value="MB.ERP.BaseLibrary.CSysSetting.BfModuleCommentUIRule,MB.ERP.BaseLibrary.CSysSetting.dll" />
+    <add key="PrintPortName" value="LPT1" />
+  </appSettings>
+  <system.web>
+    <compilation debug="true" targetFramework="4.5.1" />
+    <authentication mode="Forms">
+      <forms loginUrl="~/Account/LogOn" timeout="2880" />
+    </authentication>
+    <pages>
+      <namespaces>
+        <add namespace="System.Web.Helpers" />
+        <add namespace="System.Web.Mvc" />
+        <add namespace="System.Web.Mvc.Ajax" />
+        <add namespace="System.Web.Mvc.Html" />
+        <add namespace="System.Web.Routing" />
+        <add namespace="System.Web.WebPages" />
+      </namespaces>
+    </pages>
+    <httpRuntime targetFramework="4.5.1" />
+    <profile defaultProvider="DefaultProfileProvider">
+      <providers>
+        <add name="DefaultProfileProvider" type="System.Web.Providers.DefaultProfileProvider, System.Web.Providers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" connectionStringName="DefaultConnection" applicationName="/" />
+      </providers>
+    </profile>
+    <membership defaultProvider="DefaultMembershipProvider">
+      <providers>
+        <add name="DefaultMembershipProvider" type="System.Web.Providers.DefaultMembershipProvider, System.Web.Providers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" connectionStringName="DefaultConnection" enablePasswordRetrieval="false" enablePasswordReset="true" requiresQuestionAndAnswer="false" requiresUniqueEmail="false" maxInvalidPasswordAttempts="5" minRequiredPasswordLength="6" minRequiredNonalphanumericCharacters="0" passwordAttemptWindow="10" applicationName="/" />
+      </providers>
+    </membership>
+    <roleManager defaultProvider="DefaultRoleProvider">
+      <providers>
+        <add name="DefaultRoleProvider" type="System.Web.Providers.DefaultRoleProvider, System.Web.Providers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" connectionStringName="DefaultConnection" applicationName="/" />
+      </providers>
+    </roleManager>
+    <sessionState mode="InProc" customProvider="DefaultSessionProvider">
+      <providers>
+        <add name="DefaultSessionProvider" type="System.Web.Providers.DefaultSessionStateProvider, System.Web.Providers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" connectionStringName="DefaultConnection" />
+      </providers>
+    </sessionState>
+  </system.web>
+  <system.webServer>
+    <validation validateIntegratedModeConfiguration="false" />
+  </system.webServer>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-2.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  <entityFramework>
+    <defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework">
+      <parameters>
+        <parameter value="v11.0" />
+      </parameters>
+    </defaultConnectionFactory>
+  </entityFramework>
+  <!--<connectionStrings>
+    <add name="DefaultConnection" providerName="System.Data.SqlClient" connectionString="Data Source=(LocalDb)\v11.0;Initial Catalog=aspnet-MvcApplication1-20150327173602;Integrated Security=SSPI;AttachDBFilename=|DataDirectory|\aspnet-MvcApplication1-20150327173602.mdf" />
+  </connectionStrings>-->
+</configuration>

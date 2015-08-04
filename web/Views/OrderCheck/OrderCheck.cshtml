@@ -1,0 +1,256 @@
+﻿@model Model.VenderUser
+ @{
+               ViewBag.Title = "我厨平台分拨计划系统";
+                Layout = "~/Views/Shared/_JQBaseLayOut.cshtml";
+}
+
+@section JQscriptSection{
+       <script src="../../Scripts/viewsScript/Order/OrderC.js" type="text/javascript"></script>
+       <script src="../../Scripts/viewsScript/Common/MyDialog.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqueryeasyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <style type="text/css">
+        .mydiv {
+            background-color: #ff6;
+            border: 1px solid #f90;
+            text-align: center;
+            line-height: 40px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index:99;
+            width: 300px;
+            height: 120px;
+            left:50%;/*FF IE7*/
+            top: 50%;/*FF IE7*/
+
+            margin-left:-150px!important;/*FF IE7 该值为本身宽的一半 */
+            margin-top:-60px!important;/*FF IE7 该值为本身高的一半*/
+
+            margin-top:0px;
+
+            position:fixed!important;/*FF IE7*/
+            position:absolute;/*IE6*/
+
+            _top:       expression(eval(document.compatMode &&
+                        document.compatMode=='CSS1Compat') ?
+                        documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
+                        document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);/*IE5 IE5.5*/
+
+            }
+
+        .datagrid-header td {
+            border-right: 1px dotted #ccc;
+            font-size: 16px;
+            font-weight: normal;
+            background: #fafafa url('images/datagrid_header_bg.gif') repeat-x left bottom;
+            border-bottom: 1px dotted #ccc;
+            border-top: 1px dotted #fff;
+            }
+        .datagrid-body td, .datagrid-footer td {
+            font-size: 16px;
+            border-right: 1px dotted #ccc;
+            border-bottom: 1px dotted #ccc;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            }
+    </style>
+    <script type="text/javascript">
+        function closeDiv(){
+            document.getElementById('popDiv').style.display='none';
+        }
+
+
+        //页面加载
+        $(function () {
+            //加载菜单
+           // InitGrid();
+            $('#loginOut').click(function () {
+                $.messager.confirm('系统提示', '您确定要退出本次登录吗?', function (r) {
+                    if (r) {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("LogOut", "Account")',
+                            success: function (data) {
+                                location.href = '@Url.Action("LogOn", "Account")';
+                            }
+                        });
+                        }
+                });
+            })
+        });
+        function enterKey() {
+            if (event.keyCode == 13) {
+                val = $.trim($("#txtOrdSubjectCode").val());
+                var table = $(".datagrid-body").children('table');
+                var nofinish = false;
+                if ((val.indexOf('I') == 0 || val.indexOf('A') == 0 || val.indexOf('S') == 0) & val.indexOf('WOC') < 0) {//录入数据是订单号时
+                    table.find("tr").each(function () {
+                        $(this).find("td").each(function () {
+                                var realqty = Number($(this).parent('tr').children("td").eq(5).children('div').eq(0).html());
+                                var checknums = Number($(this).parent('tr').children("td").eq(6).children('div').eq(0).html());
+                                if (realqty > checknums) {
+                                    nofinish = true;
+                                }
+                        })
+                    })
+                    if (nofinish) {//有校验数量少于实发数量商品
+                        document.getElementById('popDiv').style.display = 'block';
+                    }
+                    else {
+                        if (table.children("tbody").children('tr').children("td").eq(5).children('div').eq(0).html() != null) {
+                            saveData();
+                        }
+                        else {
+                            InitGrid();
+                        }
+                        $("#txtOrdSubjectCode").val("");
+                    }
+                } else if ( val.indexOf('WOC') == 0) {//录入数据是商品编码时
+                    var str = $.trim($("#txtOrdSubjectCode").val());
+                    var isexists=0;
+                        table.find("tr").each(function () {//改变颜色和记录校验数量
+                            $(this).find("td").each(function () {
+                                if ($(this).children('div').eq(0).html() == str) {
+                                    $(this).parent('tr').css("background", "green");
+                                    var realqty = Number($(this).parent('tr').children("td").eq(5).children('div').eq(0).html());
+                                    var checknums = Number($(this).parent('tr').children("td").eq(6).children('div').eq(0).html());
+                                    checknums = checknums + 1;
+                                    if (realqty < checknums) {
+                                        alert("校验数量已达到实发数量请检查！");
+                                    }
+                                    else {
+                                        $(this).parent('tr').children("td").eq(6).children('div').eq(0).html(checknums);
+                                    }
+                                    isexists = 1;
+                                }
+                            })
+                        })
+                        if (isexists == 0) {
+                            alert("该商品不存在此订单中！");
+                        }
+                        $("#txtOrdSubjectCode").val("");
+                }   
+                else {
+                    alert("请录入正确的数据");
+                    $("#txtOrdSubjectCode").val("");
+                }
+               
+            }
+        }
+
+        function saveData() {
+            var arrayObj = [];
+            var item; var i = 0;
+            var table = $(".datagrid-body").children('table');
+            table.find("tr").each(function () {
+                var orderno = $(this).children("td").eq(0).children('div').eq(0).html();
+                var checknums = $(this).children("td").eq(6).children('div').eq(0).html();
+                var goodscode = $(this).children("td").eq(2).children('div').eq(0).html();
+                item = orderno + "|" + checknums + "_" + goodscode;
+                arrayObj.push(item);
+                i += 1;
+            })
+            var form = $('#orderchek');
+            form.form('submit', {
+                url: '@Url.Content("~/OrderCheck/Updates")' + '?orderlist=' + arrayObj,
+                success: function (data) {
+                    eval('data=' + data);
+                    if (data.success) {
+                        InitGrid();
+                    } else {
+                        $.messager.alert('错误', data.msg, 'error');
+                    }
+                    $("#txtOrdSubjectCode").val("");
+                }
+            });
+        }
+
+        function submit() {
+            saveData();
+            closeDiv();
+           
+        }
+
+        function change() {
+            InitGrid();
+            closeDiv();
+            $("#txtOrdSubjectCode").val("");
+        }
+</script>
+ }
+
+<body style="background-color:ButtonFace;font-size:17px" @*onload="InitGrid();"*@>
+    <form id="orderchek" method="post" action='@Url.Content("~/OrderCheck/Updates")'>
+     <div region="north" split="true" border="false" style="overflow: hidden; height: 51px;
+        color: #000000; background: url(../Content/Ext/resources/themes/images/gray/panel-header-default-bottom-bg.gif);
+        font-family: Verdana, 微软雅黑,黑体">
+        <span style="float: right; padding-right: 10px; padding-top: 30px;" class="head">欢迎:@Model.USERNAME <a
+            href="#" id="loginOut">安全退出</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/Home/Index" id="HomeIndex">返回首页</a></span>  
+            @*<img src="../../Content/themes/base/images/logo.png" height="50" align="absmiddle" />*@
+        </span>
+        <span style="padding-left:10px; font-size: 20px; ">
+            <img src="/Content/images/blocks.gif" width="20" height="20" align="absmiddle" />
+             我厨&reg - 订单拣货校验
+        </span>
+    </div>
+  @* @using (Html.BeginForm("OrderCheck", "OrderCheck", FormMethod.Post))
+  {
+    *@<div id="p1" class="easyui-panel" title="查询条件" style="height: 35px; padding: 5px;
+        background: #fafafa;" >
+        <table>
+            <tr>
+                <td>
+                    订单号/商品编码<font color="red">*</font>:
+                </td>
+                <td>
+                    <input id="txtOrdSubjectId" name="txtOrdSubjectId" style="display: none;" />
+                    <input id="txtOrdSubjectCode" name="txtOrdSubjectCode" style="width: 154px"
+                             onkeydown="enterKey()"/>
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    <a id="btnSave" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-preview'" onclick="InitGrid()">
+                        确定</a>
+                </td>
+            </tr>
+        </table>
+    </div>@*
+      <div id="p2" class="easyui-panel" title="订单信息" style="height: 35px; padding: 5px; background: #fafafa;" >
+        <table>
+            <tr>
+                <td>
+                    订单号:
+                </td>
+                <td>
+                    <input id="txtOrderNo"  name="txtSendDate"  />
+                   
+                </td>
+                <td>
+                    配送时间：
+                </td>
+                <td>
+                    <input id="txtSendDate" name="txtSendDate"  />
+                </td>
+                <td>
+                    商品总数：
+                </td>
+                <td>
+                     <input id="txtCount" name="txtCount" style="width: 154px" />
+                </td>
+            </tr>
+        </table>
+    </div>*@
+ <div id="popDiv" class="mydiv" style="display:none;">校验数量少于实发数量商品数据。请选择<br/>
+                <a href="#" onclick="submit()">提交订单</a> <a href="#" onclick="change()">切换订单</a> <a href="javascript:closeDiv()">关闭窗口</a>
+
+ </div>
+    <div>
+        <table id="tab_list">
+        </table>
+    </div>
+ @* }*@
+ </form>
+</body>
+

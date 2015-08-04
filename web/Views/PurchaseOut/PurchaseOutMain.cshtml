@@ -1,0 +1,100 @@
+﻿@model Model.VenderUser
+@{
+    ViewBag.Title = "采购退货单";
+    Layout = "~/Views/Shared/_JQBaseLayOut.cshtml";
+}
+
+@section JQscriptSection{
+     <script src="../../Scripts/viewsScript/PurchaseOut/PurchaseOutMainC.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqueryeasyui/datagrid-detailview.js" type="text/javascript"></script>
+    <script src="../../Scripts/jqueryeasyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            var curr_time = new Date();
+            var strDateEnd = curr_time.getFullYear() + "-";
+            strDateEnd += curr_time.getMonth() + 1 + "-";
+            strDateEnd += curr_time.getDate() + "-";
+            strDateEnd += " 23:59:59";
+            var strdate = curr_time.getFullYear() + "-";
+            strdate += curr_time.getMonth() + 1 + "-";
+            strdate += curr_time.getDate() + "-";
+            strdate += " 00:00:00";
+            $("#CheckTimeS").datetimebox("setValue", strdate);
+            $("#CheckTimeE").datetimebox("setValue", strDateEnd);
+        });
+
+
+        //页面加载
+        $(function () {
+            //加载菜单
+            // InitGrid();
+            $('#loginOut').click(function () {
+                $.messager.confirm('系统提示', '您确定要退出本次登录吗?', function (r) {
+                    if (r) {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("LogOut", "Account")',
+                            success: function (data) {
+                                location.href = '@Url.Action("LogOn", "Account")';
+                            }
+                        });
+                        }
+                });
+            })
+        });
+
+   </script>
+ }
+
+<body style="background-color:ButtonFace;font-size:17px" @*onload="InitGrid();"*@>
+    <form id="frmPurchase" method="post"  >
+     <div region="north" split="true" border="false" style="overflow: hidden; height: 51px;
+        color: #000000; background: url(../Content/Ext/resources/themes/images/gray/panel-header-default-bottom-bg.gif);
+        font-family: Verdana, 微软雅黑,黑体">
+        <span style="float: right; padding-right: 10px; padding-top: 30px;" class="head">欢迎:@Model.USERNAME <a
+            href="#" id="loginOut">安全退出</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/Home/Index" id="HomeIndex">返回首页</a></span>  
+            @*<img src="../../Content/themes/base/images/logo.png" height="50" align="absmiddle" />*@
+        </span>
+        <span style="padding-left:10px; font-size: 20px; ">
+            <img src="/Content/images/blocks.gif" width="20" height="20" align="absmiddle" />
+             我厨&reg - 采购退货单
+        </span>
+    </div>
+   <div id="p1" class="easyui-panel" title="查询条件" style="height: 35px; padding: 5px;
+        background: #fafafa;" >
+        <table>
+            <tr>
+                <td>
+                    订单号:
+                </td>
+                <td>
+                    <input id="txtOrdSubjectCode" name="txtOrdSubjectCode" style="width: 154px"/>
+                </td> 
+                <td>
+                    下单时间：
+                </td>
+                <td>
+                    <input class="easyui-datetimebox" id="CheckTimeS" name="CheckTimeS"  style="width: 140px;" />
+                </td>
+                <td>
+                    ~：
+                </td>
+                <td>
+                    <input class="easyui-datetimebox" id="CheckTimeE" name="CheckTimeE" style="width: 140px;" />
+                </td>
+                <td>
+                    <a id="btnSerach" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="InitGridMain()">
+                        确定</a>
+                </td>
+                 
+            </tr>
+        </table>
+    </div>
+    <div>
+        <table id="tab_list">
+        </table>
+    </div>
+        @* @Scripts.Render("~/bundles/datagriddetailview");*@
+ </form>
+</body>

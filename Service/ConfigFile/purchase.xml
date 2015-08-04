@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?> 
+ <!--   XML 文件生成时间 2012-07-18 12:00  --> 
+ <Entity> 
+   <PrimaryKeyName>ID</PrimaryKeyName> 
+   <MappingTableName>PS_ACTOR</MappingTableName> 
+   <Sqls>
+     <Sql Name="GetPurchaseMain">
+       <SqlString>
+         <String>
+           <![CDATA[
+          select ph.sheetid,
+                 ph.flag,
+                 ph.CheckDate,
+                 ph.TotalQty,
+                 ph.TotalCostValue,
+                 ph.Editor,
+                 v.vendername,
+                 pt.paytypename, 
+                 ph.EditDate,
+                 ph.expiredate, 
+                 (case ph.PurType when 0 then '普通'else '总量'end) PurType,
+                 ph.Note
+            from Purchase ph
+           inner join vender v on v.venderid = ph.venderid
+           inner join PayType pt on ph.paytypecode = pt.paytypecode
+           where
+]]>
+         </String>
+         <Param Name = "@Where" Column = "Where" TypeName = "System.String" />
+       </SqlString>
+     </Sql>
+     <Sql Name="GetPurchaseDetail">
+       <SqlString>
+         <String>
+           <![CDATA[
+             select ph.sheetid,
+                    gd.goodscode,
+                    gd.goodsname,
+                    gd.goodsspec,
+                    gd.unitname,
+                    pit.pkgunitname,  
+                    lui.lookup as pkgclassname,
+                    pit.pkgnumber,    
+                    pit.pkgqty,          
+                    pit.bulkqty,  
+                    pit.Cost,
+                    pit.Cost*pit.pkgnumber as PkgCost, 
+                    pit.QTY,
+                    pit.RealQty,
+                    pit.CostValue,
+                    ph.Editor
+              from Purchase ph
+              inner join purchaseItem pit on ph.sheetid = pit.sheetid
+              inner join goods gd on pit.goodsid = gd.goodsid
+              left join lookupitem lui on lui.fieldvalue=pit.pkgclass and lui.lookupid='PKGCLASS'
+              where ph.sheetid = @CODE
+]]>
+         </String>
+         <Param Name = "@CODE" Column = "SHEETID" TypeName = "System.String" />
+       </SqlString>
+     </Sql>
+     
+	   <Sql Name="GetPurchaseInfo">
+		   <SqlString>
+			   <String>
+				   <![CDATA[
+             select ph.sheetid,
+                 gd.goodscode,
+                 gd.goodsname,
+                 gd.goodsspec,
+                 gd.unitname,
+                 ph.flag,
+                 ph.CheckDate,
+                 ph.paytypecode,
+                 pit.pkgunitname,  
+                 lui.lookup as pkgclassname,
+                 pit.pkgnumber,    
+                 pit.pkgqty,          
+                 pit.bulkqty,       
+                 pit.QTY,
+                 pit.RealQty,
+                 pit.Cost,
+                 pit.Cost*pit.pkgnumber as PkgCost,
+                 pit.CostValue,
+                 ph.Editor, 
+                 ph.EditDate,
+                 ph.expiredate,
+                 pit.remark,
+                 (case ph.PurType when 0 then '普通' else  '总量' end) PurType,
+                 vd.vendername 
+            from Purchase ph
+            inner join purchaseItem pit on ph.sheetid = pit.sheetid
+            inner join goods gd on pit.goodsid = gd.goodsid
+            left join vender vd on vd.venderid=ph.venderid
+            left join lookupitem lui on lui.fieldvalue=pit.pkgclass and lui.lookupid='PKGCLASS' 
+            where 
+]]>
+			   </String>
+         <Param Name = "@Where" Column = "Where" TypeName = "System.String" />
+       </SqlString>
+	   </Sql>
+   </Sqls> 
+ </Entity>

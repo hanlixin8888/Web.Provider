@@ -1,0 +1,38 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.FunctionName</title>
+   @* <link href="../../Content/default.css" rel="stylesheet" type="text/css" />*@
+    <script src="@Url.Content("~/Scripts/jquery-1.7.2.min.js")" type="text/javascript"></script>
+    <link href="@Url.Content("~/Content/jqeasyui/themes/gray/easyui.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/jqeasyui/themes/icon.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/user.css")" rel="stylesheet" type="text/css" />
+    @*<script src="../../Scripts/ext-all.js" type="text/javascript"></script>
+    <script src="../../Scripts/ext-lang-zh_CN.js" type="text/javascript"></script>*@
+    <script src="@Url.Content("~/Scripts/jquery.easyui.min.js")" type="text/javascript"></script>
+    <script src="../../Scripts/SysScript/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <script src="../../Scripts/SysScript/MicrosoftAjax.js" type="text/javascript"></script>
+    <script src="../../Scripts/SysScript/MicrosoftMvcAjax.js" type="text/javascript"></script>
+    <script src="../../Scripts/SysScript/MicrosoftMvcValidation.js" type="text/javascript"></script>
+    <script src="../../Scripts/SysScript/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/SysScript/jquery.validate.js" type="text/javascript"></script>
+    <script src="../../Scripts/datapattern.js" type="text/javascript"></script>
+    <script src="../../Scripts/user.js" type="text/javascript"></script>
+    @RenderSection("scriptSection")
+    <style type="text/css">  
+     html,body{
+        margin:0px;
+        height:100%;
+        overflow:hidden;
+    }     
+</style>
+</head>
+<body>
+    <div style="overflow:auto;height:100%;width:100%">
+        @RenderBody()
+    </div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--   XML 文件生成时间 2015-05-25 12:00  -->
+<Entity>
+  <PrimaryKeyName>ID</PrimaryKeyName>
+  <MappingTableName>PS_ACTOR</MappingTableName>
+  <Sqls>
+    <Sql Name="GetPurchaseOutInfo">
+      <SqlString>
+        <String>
+          <![CDATA[
+            select 
+                rt.sheetid,    
+                rt.refsheetid,   
+                rt.venderid,    
+                gd.goodscode,   
+                gd.goodsname,  
+                gd.goodsspec,
+                gd.unitname,  
+                vd.vendercode,    
+                vd.vendername,   
+                rti.seqno,
+                rti.price,
+                rti.saletaxvalue,
+                rti.salevalue,
+                rti.cost,
+                rti.costvalue,
+                rti.notifyqty,    
+                rti.qty,
+                rti.remark,         
+                rt.paytypecode,   
+                rt.flag,          
+                rt.editor,         
+                rt.editdate,
+                rt.CheckDate,
+                rti.warehouseid,
+                wh.warehousename
+              from ret rt 
+              inner join retitem rti on rt.sheetid=rti.sheetid
+              inner join goods gd on rti.goodsid=gd.goodsid
+              left join vender vd on vd.venderid=rt.venderid 
+              left join warehouse wh on wh.warehouseid=rti.warehouseid
+              where 
+]]>
+        </String>
+        <Param Name = "@Where" Column = "Where" TypeName = "System.String" />
+      </SqlString>
+    </Sql>
+
+    <Sql Name="GetPurchaseOutMain">
+      <SqlString>
+        <String>
+          <![CDATA[
+          select rt.sheetid, 
+             rt.refsheetid,
+             rt.flag, 
+             rt.paytypecode, 
+             pt.paytypename,
+             rt.totalqty,
+             rt.totalsalevalue, 
+             rt.Editor,
+             rt.editdate,
+             rt.CheckDate,
+             rt.note, 
+             vd.vendername 
+        from ret rt  
+        inner join vender vd on vd.venderid=rt.venderid
+        inner join paytype pt on pt.paytypecode=rt.paytypecode
+         where
+]]>
+        </String>
+        <Param Name = "@Where" Column = "Where" TypeName = "System.String" />
+      </SqlString>
+    </Sql>
+    <Sql Name="GetPurchaseOutDetail">
+      <SqlString>
+        <String>
+          <![CDATA[
+             select rti.sheetid,
+                 gd.goodscode,
+                 gd.goodsname, 
+                 gd.unitname,
+                 gd.goodsspec,
+                 rti.notifyqty,
+                 rti.qty,
+                 rti.price,
+                 rti.salevalue,
+                 rti.remark,
+                 rti.warehouseid,
+                 wh.warehousename
+            from retitem rti  
+            inner join goods gd on rti.goodsid = gd.goodsid
+            left join warehouse wh on wh.warehouseid=rti.warehouseid
+            where rti.sheetid = @CODE
+]]>
+        </String>
+        <Param Name = "@CODE" Column = "SHEETID" TypeName = "System.String" />
+      </SqlString>
+    </Sql>
+  </Sqls>
+</Entity>
